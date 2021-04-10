@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block content %}
+<div class="shadow-lg p-3 mb-5 bg-white rounded register_form">
+	{% bootstrap_messages %}
+	<h1 class="reg-chapter">Регистрация пользователя</h1>
+	<form method="post">
+		{% csrf_token %}
+		{% bootstrap_form form %}
+		{% buttons submit="Зарегестрироваться" %}
+		{% endbuttons %}
+	</form>
+</div>
+{% endblock content %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+
+
+<div class="row">
+	<div class="answer_error shadow-lg p-3 rounded p-3 mb-2 bg-secondary text-white mx-auto mt-5" style="display: none;">
+		<h1>Время вышло!Обратитесь к администратору!<br><a class='poll_view' href="{% url 'hr_test:poll' %}">Вернуться</a></h1>
+	</div>
+	<div style="max-width: 700px;" class="answer shadow-lg p-3 rounded p-3 mb-2 bg-secondary text-white mx-auto mt-5">
+		{% bootstrap_messages %}
+		<h2>Опрос - {{ poll }}</h2>
+		<h3 style="color:#204A87FF;" class="resp" >Вопрос: {{ question.title }} </h3>
+
+		
+		{% if poll.is_timer %}	
+		<h5 class="create" id="timer_poll"> На прохождение опроса у вас оcталось &nbsp; <span id="minutes">{{ minutes }}</span> : <span id="seconds" > {{ second }}  </span> &nbsp; секунд</h5>
+		<p class="create" > Для ответа на вопрос осталось - <span id="timer_question" >{{question.timer}}</span> секунд </p>
+			
+		{% endif %}
+		
+		{% if question.view == 'r' %}		
+		{% for i in question_image %}	
+			<div class='figure'>
+			  <p><img class='scaled' src="{{ i.images.url }}"
+			    alt="img">
+			  <p>{{ forloop.counter }}
+			</div>
+		{% endfor %}		
+		<form action="{% url 'hr_test:points' poll_id=poll.id question_id=question.id %}" method="post">
+		{% csrf_token %}
+		{% for answer in question.answer_set.all %}
+			
+			<div class="form-check p-3" style= "zoom: 1.3;">
+				<input class="form-check-input" type="radio" name="answer" id="answer{{ forloop.counter }}" value="{{answer.score}}"/>
+				<label class="form-check-label" for="answer{{ forloop.counter }}"> - {{ answer.title }} </label>	
+			</div>
+		
+		{% endfor %}
+			<input class="btn btn-primary btn-lg btn-block" type="submit" value="Отправить">
+		</form>
+		
+		{% endif %}
+
+		{% if question.view == 'c' %}
+			{% for i in question_image %}
+			<div class='figure'>
+			  <p><img class='scaled' src="{{ i.images.url }}"
+			    alt="img">
+			  <p>{{ forloop.counter }}
+			</div>
+			{% endfor %}
+		<form action="{% url 'hr_test:points' poll_id=poll.id question_id=question.id %}" method="post">
+		{% csrf_token %}
+		
+		{% for answer in question.answer_set.all %}
+			<div class="form-check" style= "zoom: 1.3;">
+				<input class="form-check-input" type="checkbox" name="answer" id="answer{{ forloop.counter }}" value="{{answer.score}}"/>
+				<label class="form-check-label" for="answer{{ forloop.counter }}"> - {{ answer.title }} </label>	
+			</div>
+		
+		{% endfor %}
+			<input class="btn btn-primary btn-lg btn-block" type="submit" value="Отправить">
+		</form>
+		
+		{% endif %}
+	</div>
+</div>
+{% endblock  %}

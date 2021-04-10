@@ -1,0 +1,43 @@
+{% load bootstrap4 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% block title %} Главная {% endblock title %}</title>
+	<link rel="stylesheet" href="{% static 'hr_test/css/style.css' %}" type="text/css">
+	{% bootstrap_css %}
+	{% bootstrap_javascript jquery='build' %}
+</head>
+<body>
+
+	{% if user.is_active %}
+	<nav style="padding: 20px; margin: 5px;" class="nav navbar-dark bg-dark">
+		{% if user.is_staff == False and user.is_manager == False %}
+		<a class="nav-link active" href="{% url 'hr_test:index' %}">На главную</a>
+		<a class="nav-link active" href="{% url 'hr_test:result_user' %}">Результаты опросов</a>
+			
+		{% endif %}
+		{% if user.is_staff or user.is_manager == True %}
+		<a class="nav-link" href="{% url 'hr_test:index' %}">Активные опросы</a>
+		<a class="nav-link" href="/admin">Админка</a>
+		<a class="nav-link" href="{% url 'hr_test:result_admin' %}">Результаты опросов</a>  
+		{% endif %}
+		<a class="nav-link" href="{% url 'hr_test:logout' %}">Выход</a>
+	</nav>
+	{% else %}
+	<nav style="padding: 20px; margin: 5px;" class="nav navbar-dark bg-dark justify-content-end">	
+			<a class="nav-link active" href="{% url 'hr_test:register' %}">Регистрация</a>
+			<a class="nav-link" href="{% url 'hr_test:login' %}">Вход</a>
+	{% endif %}
+	</nav>
+	<section>
+		<p>{{user.username}}</p>
+		{% block content %}
+		    
+		{% endblock %}
+	</section>
+	<script src="{% static "hr_test/js/main.js" %}"></script>
+</body>
+</html>

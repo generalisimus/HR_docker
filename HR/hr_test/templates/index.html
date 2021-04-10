@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+{% bootstrap_messages %}
+	{% if user.is_active and user.is_staff == False and user.is_manager == False %}	
+	<div class="row">
+		<div class="mx-auto mt-5">
+			
+		<h4>
+			<a class="poll_view" href="{% url 'hr_test:poll' %}">Просмотр доступных опросов</a>
+		</h4>
+	{% elif user.is_staff or user.is_manager %}
+		<div class="row">
+			<div class="mx-auto mt-5">			
+				<h4 class='mb-1' >Активные опросы</h4>
+			</div>
+		</div>
+	{% for i in poll %}
+	<ul class="list-group">
+	  <li class="list-group-item d-flex justify-content-between align-items-center">
+	    {{i.title}}
+	    {% for b, n in count.items %}
+		{% if b == i.title %}
+		<span class="badge-pill">Кол-во сотрудников прошедших опрос ({{ b }})</span>	    	
+		<span class="badge badge-primary badge-pill"> {{ n }} </span>
+		{% endif %}
+
+	    {% endfor %}
+	  </li>
+	</ul>	
+	{% endfor %}
+	{% else %}
+	<div class="row">
+		<div class="mx-auto mt-5">
+			
+		<h4>Эта страница предназначена только для зарегестрированных пользователей. <br> Для отображения контента пройдите процедуру <a class="poll_view" href="{% url 'hr_test:register' %}"><strong>регистрации</strong></a> или осуществите <a class="poll_view" href="{% url 'hr_test:login' %}"><strong>вход</strong></a>  </h4>
+		</div>
+		
+	</div>
+		</div>
+	</div>
+	{% endif %}
+
+
+
+{% endblock  %}

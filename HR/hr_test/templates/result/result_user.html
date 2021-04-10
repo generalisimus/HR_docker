@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">	
+  <form class="form-inline mx-auto mt-3">
+    <label style="font-size: 25px;" for='1'>Отображается 10 последних опросов в ином случае воспользуйтесь поиском&nbsp; </label>
+    <input class="form-control mr-sm-2" type="search" id="1" placeholder="Search" aria-label="Search" name='search'>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</div>
+  </form>
+<div id="accordion" class="pt-5">
+  <div class="card">
+  	{% for i in result_user %}
+  	<div class="card-header" id="headingOne{{i.id}}">
+      <h5 class="mb-0">
+        <button style="text-decoration: none; color: #2E3436FF;size: 20px;" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne{{i.id}}" aria-expanded="true" aria-controls="collapseOne">
+          
+        	<strong style="font-size: 20px;"> {{ i.poll_total }} </strong>
+        </button>
+      </h5>
+    </div>
+    {% for r in result %}
+    <div id="collapseOne{{i.id}}" class="collapse" aria-labelledby="headingOne{{i.id}}" data-parent="#accordion">
+      <div class="card-body p-1 pl-4">
+      	{% if r.poll_total == i.poll_total %}
+      	<p> Вопрос: {{ r.question_total }}</p>
+      	<p> Ваш ответ: {{ r.answer_total }} </p>
+      	<p>Баллы за ответ: {{ r.total }}</p>
+      	{% endif %}
+      </div>
+    </div>
+    {% endfor %}  	
+    {% endfor %}
+  </div>
+</div>
+{% endblock  %}
