@@ -15,8 +15,7 @@ services:
     ports:
       - 7000:7000
     # Файл содержащий переменные для контейнера
-    env_file: 
-      - ./.env
+
   db:
     # Образ и версия базы, которую мы будем использовать
     image: postgres:12.0-alpine
@@ -25,9 +24,13 @@ services:
       - postgres_volume:/var/lib/postgresql/data/
     environment:
       # Учетные данные, которые можно будет переопределить
+      - SECRET_KEY=secretkey
+      - POSTGRES_ENGINE=django.db.backends.postgresql
+      - POSTGRES_DB=django_db
       - POSTGRES_USER=django_user
       - POSTGRES_PASSWORD=django_password
-      - POSTGRES_DB=django_db
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
 
 volumes:
   postgres_volume:
